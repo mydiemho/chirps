@@ -15,7 +15,7 @@ from config import *
 from clusterConfig import *
 
 # kafka setup
-kafka_client = KafkaClient(kafka)
+kafka_client = KafkaClient(kafka_cluster)
 producer = SimpleProducer(kafka_client)
 topicName = "twitterFilterStream"
 
