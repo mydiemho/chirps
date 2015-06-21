@@ -1,19 +1,19 @@
 # This is a non-operational example demonstrating the use of a Kafka spout.
 #
-name: sample_stream_topology
+name: filter_stream_topology
 
 workers: 4
 
 topology:
 
 - spout:
-        name: kafka-sample-spout
+        name: kafka-filter-spout
         parallelism_hint: 4
         type: kafka
         options:
             # The Kafka topic to stream from.
             # Required.
-            topic: "twitterSampleStream"
+            topic: "twitterFilterStream"
 
             # ZooKeeper connection string. Comma-separated list of ZooKeeper
             # servers.
@@ -24,11 +24,11 @@ topology:
 
             # Root path in ZooKeeper to store consumer offsets.
             # Defaults to: /pyleus-kafka-offsets/<topology name>
-            zk_root: /pyleus-kafka-offsets/sample_stream_topology
+            zk_root: /pyleus-kafka-offsets/filter_stream_topology
 
             # Kafka consumer ID.
 #           # Defaults to: pyleus-<topology name>
-            consumer_id: pyleus-sample_stream_topology
+            consumer_id: pyleus-filter_stream_topology
 
             # Whether the initial offset should be that specified by
 #           # start_offset_time (true) or the head of the stream (false).
@@ -40,8 +40,8 @@ topology:
             start_offset_time: 2147483648
 
 - bolt:
-        name: sample_stream_bolt
+        name: filter_stream_bolt
         parallelism_hint: 8
-        module: sample_stream_topology.sampleStreamBolt
+        module: filter_stream_topology.filterStreamBolt
         groupings:
-            - shuffle_grouping: kafka-sample-spout
+            - shuffle_grouping: kafka-filter-spout

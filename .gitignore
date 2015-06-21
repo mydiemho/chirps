@@ -1,3 +1,4 @@
 .idea
 twitterProducer/config.py
 twitterProducer/config.pyc
+*.jar
