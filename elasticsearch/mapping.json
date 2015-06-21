@@ -1,0 +1,16 @@
+{
+  "filterStream": {
+    "properties": {
+      "text": {
+        "type": "string"
+      },
+      "location": {
+        "type": "geo_point"
+      },
+      "hashtags": {
+        "type": "string"
+      }
+    },
+    "_ttl" : { "enabled" : true, "default" : "2h" }
+  }
+}

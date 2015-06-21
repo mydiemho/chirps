@@ -19,7 +19,7 @@ log = logging.getLogger("geo_update_topology.geo_update_bolt")
 es = pyelasticsearch.ElasticSearch(urls=ELASTIC_SEARCH_CLUSTER)
 kafka_client = KafkaClient(hosts=KAFKA_CLUSTER)
 producer = SimpleProducer(kafka_client)
-
+index = "twitter"
 
 class FilterStreamBolt(SimpleBolt):
 
@@ -27,33 +27,30 @@ class FilterStreamBolt(SimpleBolt):
         request = tup.values
 
         # convert the extract value to a JSON object
-        parsed_msg = json.loads(request[0])
+        data = json.loads(request[0])
         log.debug("+++++++++++++++++++RECEIVED MSG++++++++++++++++++++")
-        log.debug(parsed_msg)
 
-        # indexname = 'taxi_index'
-        # taxi_type = 'taxi'
-        # taxi_id = parsed_msg['taxi_id']
-        # taxi_doc = {
-        #     "location": {
-        #         "lat": parsed_msg['location']['latitude'],
-        #         "lon": parsed_msg['location']['longitude']
-        #     }
-        # }
-        #
-        # try:
-        #     res = es.update(index=indexname,
-        #                     id=taxi_id,
-        #                     doc=taxi_doc,
-        #                     doc_type=taxi_type,
-        #                     retry_on_conflict=2)
-        #
-        #     log.debug("+++++++++++++++++++updated location for taxi %s++++++++++++++++++++", taxi_id)
-        #     log.debug("%s\n", res)
-        # except Exception as e:
-        #     log.error("++++++++++FAILED TO UPDATE GEO+++++++++")
-        #     log.error("%s\n", str(e))
+        # build object to store in elasticsearch
+        coordinates = data['coordinates']['coordinates']
+        hashtag_map = data['entities']['hashtags']
+        hashtags = []
+        for ob in hashtag_map:
+            hashtags.append(ob['text'])
 
+        text = data['text']
+
+        dict = {
+            'location': {
+                'lat': coordinates[0],
+                'lon': coordinates[1]
+            },
+            'text': text
+        }
+
+        if len(hashtags) != 0:
+            dict['hashtags'] = hashtags
+
+        es.index(index=index, doc_type="filterStream", doc=dict)
 
 if __name__ == '__main__':
     logging.basicConfig(
