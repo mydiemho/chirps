@@ -51,7 +51,8 @@ class FilterStreamBolt(SimpleBolt):
             dict['hashtags'] = hashtags
 
         res = es.index(index=index, doc_type="filterStream", doc=dict)
-        print res
+        log.debug(json.dumps(res))
+        log.debug("\n")
 
 if __name__ == '__main__':
     logging.basicConfig(
