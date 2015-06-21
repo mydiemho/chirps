@@ -18,14 +18,12 @@ from clusterConfig import *
 # kafka setup
 kafka_client = KafkaClient(kafka_cluster)
 producer = SimpleProducer(kafka_client)
-topicName = "twitterSampleStream"
+topicName = "tweets"
 
 class TweetStreamListener(TwythonStreamer):
     def on_success(self, data):
-        # look for 'text' to filter ill-formatted tweets in stream
-        if 'text' in data and data['coordinates'] != None:
-            print "+++++++++++sending msg+++++++++++++++"
-            producer.send_messages(topicName, json.dumps(data))
+        print "+++++++++++sending msg+++++++++++++++"
+        producer.send_messages(topicName, json.dumps(data))
 
     def on_error(self, status_code, data):
         print '!!! error occurred !!!'
@@ -36,4 +34,10 @@ class TweetStreamListener(TwythonStreamer):
 
 if __name__ == '__main__':
     stream = TweetStreamListener(consumer_key, consumer_secret, access_key, access_secret)
-    stream.statuses.sample()
+    while True:
+        try:
+            stream.statuses.sample()
+        except Exception as e:
+            print "++++++++++CRASH+++++++++++"
+            print e
+            continue
