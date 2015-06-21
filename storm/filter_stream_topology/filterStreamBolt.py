@@ -50,7 +50,8 @@ class FilterStreamBolt(SimpleBolt):
         if len(hashtags) != 0:
             dict['hashtags'] = hashtags
 
-        es.index(index=index, doc_type="filterStream", doc=dict)
+        res = es.index(index=index, doc_type="filterStream", doc=dict)
+        print res
 
 if __name__ == '__main__':
     logging.basicConfig(

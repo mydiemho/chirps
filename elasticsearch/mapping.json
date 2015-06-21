@@ -11,6 +11,6 @@
         "type": "string"
       }
     },
-    "_ttl" : { "enabled" : true, "default" : "2h" }
+    "_ttl" : { "enabled" : true, "default" : "6h" }
   }
 }
