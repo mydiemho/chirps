@@ -36,5 +36,6 @@ class TweetStreamListener(TwythonStreamer):
 if __name__ == '__main__':
     stream = TweetStreamListener(consumer_key, consumer_secret, access_key, access_secret)
 
-    # only include tweets in sf
-    stream.statuses.filter(locations='-122.75,36.8,-121.75,37.8')
+    # only include tweets in US
+    bound = '-179.1506, 18.9117, -66.9406, 71.4410'
+    stream.statuses.filter(locations=bound)
