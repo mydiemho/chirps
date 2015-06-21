@@ -23,6 +23,7 @@ class TweetStreamListener(TwythonStreamer):
     def on_success(self, data):
         # look for 'text' to filter ill-formatted tweets in stream
         if 'text' in data and data['coordinates'] != None:
+            print "+++++++++++sending msg+++++++++++++++"
             producer.send_messages(topicName, json.dumps(data))
 
     def on_error(self, status_code, data):
