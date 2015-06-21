@@ -31,28 +31,28 @@ class FilterStreamBolt(SimpleBolt):
         log.debug("+++++++++++++++++++RECEIVED MSG++++++++++++++++++++")
         log.debug(parsed_msg)
 
-        indexname = 'taxi_index'
-        taxi_type = 'taxi'
-        taxi_id = parsed_msg['taxi_id']
-        taxi_doc = {
-            "location": {
-                "lat": parsed_msg['location']['latitude'],
-                "lon": parsed_msg['location']['longitude']
-            }
-        }
-
-        try:
-            res = es.update(index=indexname,
-                            id=taxi_id,
-                            doc=taxi_doc,
-                            doc_type=taxi_type,
-                            retry_on_conflict=2)
-
-            log.debug("+++++++++++++++++++updated location for taxi %s++++++++++++++++++++", taxi_id)
-            log.debug("%s\n", res)
-        except Exception as e:
-            log.error("++++++++++FAILED TO UPDATE GEO+++++++++")
-            log.error("%s\n", str(e))
+        # indexname = 'taxi_index'
+        # taxi_type = 'taxi'
+        # taxi_id = parsed_msg['taxi_id']
+        # taxi_doc = {
+        #     "location": {
+        #         "lat": parsed_msg['location']['latitude'],
+        #         "lon": parsed_msg['location']['longitude']
+        #     }
+        # }
+        #
+        # try:
+        #     res = es.update(index=indexname,
+        #                     id=taxi_id,
+        #                     doc=taxi_doc,
+        #                     doc_type=taxi_type,
+        #                     retry_on_conflict=2)
+        #
+        #     log.debug("+++++++++++++++++++updated location for taxi %s++++++++++++++++++++", taxi_id)
+        #     log.debug("%s\n", res)
+        # except Exception as e:
+        #     log.error("++++++++++FAILED TO UPDATE GEO+++++++++")
+        #     log.error("%s\n", str(e))
 
 
 if __name__ == '__main__':
