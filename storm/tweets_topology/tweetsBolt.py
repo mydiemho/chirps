@@ -30,6 +30,14 @@ class TweetsBolt(SimpleBolt):
         data = json.loads(request[0])
         log.debug("+++++++++++++++++++RECEIVED MSG++++++++++++++++++++")
 
+
+        # skip retweets
+        if data['retweet_count']:
+                return True
+
+        # skip if already in couch
+        if status.id_str in db:
+                return True
         # look for 'text' to filter ill-formatted tweets in stream
         if 'text' in data and data['coordinates'] != None:
 
@@ -37,8 +45,10 @@ class TweetsBolt(SimpleBolt):
             coordinates = data['coordinates']['coordinates']
             hashtag_map = data['entities']['hashtags']
             hashtags = []
+
+            # normalize hashtags
             for ob in hashtag_map:
-                hashtags.append(ob['text'])
+                hashtags.append(ob['text'].lower())
 
             text = data['text']
 
