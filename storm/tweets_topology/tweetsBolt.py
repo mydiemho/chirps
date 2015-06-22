@@ -30,14 +30,6 @@ class TweetsBolt(SimpleBolt):
         data = json.loads(request[0])
         log.debug("+++++++++++++++++++RECEIVED MSG++++++++++++++++++++")
 
-
-        # skip retweets
-        if data['retweet_count']:
-                return True
-
-        # skip if already in couch
-        if status.id_str in db:
-                return True
         # look for 'text' to filter ill-formatted tweets in stream
         if 'text' in data and data['coordinates'] != None:
 
