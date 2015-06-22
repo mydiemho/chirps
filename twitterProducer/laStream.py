@@ -34,7 +34,7 @@ class TweetStreamListener(TwythonStreamer):
 if __name__ == '__main__':
     stream = TweetStreamListener(consumer_key, consumer_secret, access_key, access_secret)
 
-    # only include tweets in SF
+    # only include tweets in NY
     bound = '-118.9448, 32.8007, -117.6462, 34.8233'
     while True:
         try:

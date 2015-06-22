@@ -1,4 +1,4 @@
-sfStream.py#!/usr/bin/python
+#!/usr/bin/python
 
 __author__ = 'myho'
 
