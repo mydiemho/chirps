@@ -11,7 +11,7 @@ from kafka import *
 
 from twython import TwythonStreamer
 
-from config import *
+from laConfig import *
 from clusterConfig import *
 
 # kafka setup
