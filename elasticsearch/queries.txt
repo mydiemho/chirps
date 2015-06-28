@@ -1,10 +1,11 @@
 =====================FIND RESULT that falls WITHIN 1KM Radius====================
 
 https://www.elastic.co/guide/en/elasticsearch/guide/current/geo-distance.html
+https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-range-filter.html
 
 GET /twitter/tweets/_search
 {
-  "query": {
+"query": {
     "filtered": {
       "filter": {
         "geo_distance": {
@@ -14,6 +15,55 @@ GET /twitter/tweets/_search
             "lon": -122.4183333
           }
         }
+      }
+    }
+  }
+}
+
+=====================FIND RESULT that contains hashtags====================
+GET /twitter/tweets/_search?pretty
+{
+    "query": {
+        "query_string": {
+            "query": "_exists_:hashtags"
+        }
+    }
+}
+
+GET /twitter/tweets/_search
+{
+    "query" : {
+        "filtered" : {
+            "filter" : {
+                "exists" : { "field" : "hashtags" }
+            }
+        }
+    }
+}
+
+
+=====================FIND RESULT that contains hashtags and falls WITHIN 1KM Radius====================
+https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-and-filter.html
+
+GET /twitter/tweets/_search
+{
+  "query": {
+    "filtered": {
+      "filter": {
+        "and": [
+          {
+            "geo_distance": {
+              "distance": "1km",
+              "location": {
+                "lat":  37.775,
+                "lon": -122.4183333
+              }
+            }
+          },
+          {
+            "exists" : { "field" : "hashtags" }
+          }
+        ]
       }
     }
   }
@@ -52,5 +102,40 @@ PUT /taxi_index/_settings
   "index": {
     "number_of_replicas": 2
   }
+}
+
+=====================FIND RESULT that contains hashtags and falls WITHIN 1KM Radius and aggregates hashtag count====================
+GET /twitter/tweets/_search
+{
+  "from": 0,
+  "size": 100,
+  "query": {
+    "filtered": {
+      "filter": {
+        "and": [
+          {
+            "geo_distance": {
+              "distance": "2km",
+              "location": {
+                "lat":  37.775,
+                "lon": -122.4183333
+              }
+          }
+          },
+          {
+            "exists" : { "field" : "hashtags" }
+          }
+        ]
+      }
+    }
+  },
+    "aggs" : {
+        "tags_count": {
+            "terms" : {
+              "field" : "hashtags",
+              "size": 0
+            }
+        }
+    }
 }
 
